@@ -28,7 +28,7 @@ class Forecast extends StatelessWidget {
               Text(
                 time,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   letterSpacing: 1,
                   fontWeight: FontWeight.bold
                 ),
