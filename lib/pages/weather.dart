@@ -72,15 +72,15 @@ class _WeatherAppState extends State<WeatherApp> {
 
           final data = snapshot.data!;
 
-          final LMods = data["list"][0];
+          final wkan = data["list"][0];
           // Main variables
-          final temp = LMods["main"]["temp"];
-          final desc = LMods["weather"][0]["main"];
+          final temp = wkan["main"]["temp"];
+          final desc = wkan["weather"][0]["main"];
 // 
           // Additional variables
-          final humidity = LMods["main"]["humidity"].toString();
-          final windSpeed = LMods["wind"]["speed"].toString();
-          final pressure = LMods["main"]["pressure"].toString();
+          final humidity = wkan["main"]["humidity"].toString();
+          final windSpeed = wkan["wind"]["speed"].toString();
+          final pressure = wkan["main"]["pressure"].toString();
 
           return Padding(
           padding: const EdgeInsets.all(16.0),
