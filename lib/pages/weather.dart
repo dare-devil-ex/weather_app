@@ -142,10 +142,12 @@ class _WeatherAppState extends State<WeatherApp> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    Forecast(time: "19:01", value: "203"),
-                    Forecast(time: "19:01", value: "203"),
-                    Forecast(time: "19:01", value: "203"),
-                    Forecast(time: "19:01", value: "203"),
+                    for (int i=1; i<=5; i++) 
+                    Forecast(
+                      time: "19:01",
+                      icon: data["list"][i+1]["weather"][0]["main"] == "Clouds" || data["list"][i+1]["weather"]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
+                      value: data["list"][i+1]["main"]["temp"].toString()
+                    ),
                   ],
                 ),
               ),

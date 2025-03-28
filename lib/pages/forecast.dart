@@ -4,12 +4,14 @@ class Forecast extends StatelessWidget {
 
   final String time;
   final String value;
+  final IconData icon;
 
 
   const Forecast({
     super.key,
     required this.time,
-    required this.value
+    required this.value,
+    required this.icon
   });
 
   @override
@@ -33,7 +35,7 @@ class Forecast extends StatelessWidget {
               ),
               SizedBox(height: 2),
               Icon(
-                Icons.cloud,
+                icon,
                 size: 25,
               ),
               SizedBox(height: 5),
