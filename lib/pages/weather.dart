@@ -16,6 +16,7 @@ class WeatherApp extends StatefulWidget {
 class _WeatherAppState extends State<WeatherApp> {
 
   double temp = 0;
+  String desc = "";
 
   Future fetcher() async {
     try{
@@ -28,11 +29,12 @@ class _WeatherAppState extends State<WeatherApp> {
 
       setState(() {
         temp = data["list"][0]["main"]["temp"];
+        desc = data["list"][0]["weather"][0]["description"];
       });
       
 
       } catch(e) {
-        throw "Error occured";
+        throw e.toString();
       }
     }
   
@@ -60,7 +62,10 @@ class _WeatherAppState extends State<WeatherApp> {
 
       body: FutureBuilder(
         future: fetcher(),
-        builder: (context, snapshot) => Padding(
+        builder: (context, snapshot) {
+          print(snapshot);
+          print(snapshot.runtimeType);
+          return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +96,7 @@ class _WeatherAppState extends State<WeatherApp> {
                               size: 50,
                             ),
                             Text(
-                              "Rain",
+                              desc,
                               style: TextStyle(
                                 fontSize: 15,
                                 letterSpacing: 1.4,
@@ -166,7 +171,8 @@ class _WeatherAppState extends State<WeatherApp> {
               ),
              ],
           ),
-        ),
+        );
+        },
       ),
     );
   }
