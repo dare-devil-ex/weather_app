@@ -19,23 +19,24 @@ class _WeatherAppState extends State<WeatherApp> {
   String desc = "";
 
   Future fetcher() async {
+    
     try{
       final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=London&appid=d1845658f92b31c64bd94f06f7188c9c"));
       final data = jsonDecode(res.body);
       
       if (data["cod"] != "200") {
-        throw "Bad request!";
+        throw data["message"];
       }
 
-      setState(() {
-        temp = data["list"][0]["main"]["temp"];
-        desc = data["list"][0]["weather"][0]["description"];
-      });
+
       
+      
+      return data;
 
       } catch(e) {
         throw e.toString();
       }
+
     }
   
 
@@ -63,8 +64,14 @@ class _WeatherAppState extends State<WeatherApp> {
       body: FutureBuilder(
         future: fetcher(),
         builder: (context, snapshot) {
-          print(snapshot);
-          print(snapshot.runtimeType);
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator.adaptive());
+          }
+
+          final temp = snapshot.data["list"][0]["main"]["temp"];
+          final desc = snapshot.data["list"][0]["weather"][0]["description"];
+
           return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
