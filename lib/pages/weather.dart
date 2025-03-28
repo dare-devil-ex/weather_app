@@ -66,7 +66,7 @@ class _WeatherAppState extends State<WeatherApp> {
 
           if (snapshot.hasError) {
             return Center(
-              child: Text(snapshot.hasError.toString()),
+              child: Text("A unexcepted error occured"),
             );
           }
 
@@ -138,20 +138,39 @@ class _WeatherAppState extends State<WeatherApp> {
               ),
               SizedBox(height: 15),
               
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (int i=0; i < 39; i++) 
-                    Forecast(
-                      time: data["list"][i+1]["dt"].toString(),
-                      icon: data["list"][i+1]["weather"][0]["main"] == "Clouds" || data["list"][i+1]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
-                      value: data["list"][i+1]["main"]["temp"].toString()
-                    ),
-                  ],
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     children: [
+              //       for (int i=0; i < 39; i++) 
+              //       Forecast(
+              //         time: data["list"][i+1]["dt"].toString(),
+              //         icon: data["list"][i+1]["weather"][0]["main"] == "Clouds" || data["list"][i+1]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
+              //         value: data["list"][i+1]["main"]["temp"].toString()
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              
+              SizedBox(
+                height: 110,
+                child: ListView.builder(
+                  itemCount: 39,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final time = data["list"][ index + 1]["dt"].toString();
+                    final value = data["list"][ index + 1 ]["main"]["temp"].toString();
+                    final icon = data["list"][ index + 1 ]["weather"][0]["main"] == "Clouds" || data["list"][ index + 1 ]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny;
+                    return Forecast(
+                      time: time,
+                      value: value,
+                       icon: icon
+                    );
+                  },
                 ),
               ),
-        
+
               SizedBox(height: 20),
         
               // Additional Information

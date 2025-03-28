@@ -27,18 +27,20 @@ class Forecast extends StatelessWidget {
             children: [
               Text(
                 time,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   letterSpacing: 1,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 2),
+              SizedBox(height: 7),
               Icon(
                 icon,
                 size: 25,
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 7),
               Text(
                 value,
                 style: TextStyle(
