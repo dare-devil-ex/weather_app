@@ -145,7 +145,7 @@ class _WeatherAppState extends State<WeatherApp> {
                     for (int i=1; i<=5; i++) 
                     Forecast(
                       time: "19:01",
-                      icon: data["list"][i+1]["weather"][0]["main"] == "Clouds" || data["list"][i+1]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
+                      icon: data["list"][i+1]["weather"][0]["main"].toString() == "Clouds" || data["list"][i+1]["weather"][0]["main"].toString() == "Rain" ? Icons.cloud : Icons.sunny,
                       value: data["list"][i+1]["main"]["temp"].toString()
                     ),
                   ],
