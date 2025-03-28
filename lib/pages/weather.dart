@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/pages/Additional.dart';
 import 'package:weather_app/pages/forecast.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class _WeatherAppState extends State<WeatherApp> {
   Future<Map<String, dynamic>> fetcher() async {
     
     try{
-      final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=London&appid=d1845658f92b31c64bd94f06f7188c9c"));
+      final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=India&appid=d1845658f92b31c64bd94f06f7188c9c"));
       final data = jsonDecode(res.body);
       
       if (data["cod"] != "200") {
@@ -138,32 +139,17 @@ class _WeatherAppState extends State<WeatherApp> {
               ),
               SizedBox(height: 15),
               
-              // SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     children: [
-              //       for (int i=0; i < 39; i++) 
-              //       Forecast(
-              //         time: data["list"][i+1]["dt"].toString(),
-              //         icon: data["list"][i+1]["weather"][0]["main"] == "Clouds" || data["list"][i+1]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny,
-              //         value: data["list"][i+1]["main"]["temp"].toString()
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
-              
               SizedBox(
                 height: 110,
                 child: ListView.builder(
-                  itemCount: 39,
+                  itemCount: 5,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    final time = data["list"][ index + 1]["dt"].toString();
+                    final time = DateTime.parse(data["list"][ index + 1]["dt_txt"].toString());
                     final value = data["list"][ index + 1 ]["main"]["temp"].toString();
                     final icon = data["list"][ index + 1 ]["weather"][0]["main"] == "Clouds" || data["list"][ index + 1 ]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny;
                     return Forecast(
-                      time: time,
+                      time: DateFormat.Hm().format(time),
                       value: value,
                        icon: icon
                     );
