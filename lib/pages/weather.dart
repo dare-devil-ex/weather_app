@@ -15,10 +15,9 @@ class WeatherApp extends StatefulWidget {
 
 class _WeatherAppState extends State<WeatherApp> {
 
-  double temp = 0;
-  String desc = "";
+  
 
-  Future fetcher() async {
+  Future<Map<String, dynamic>> fetcher() async {
     
     try{
       final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=London&appid=d1845658f92b31c64bd94f06f7188c9c"));
@@ -65,11 +64,23 @@ class _WeatherAppState extends State<WeatherApp> {
             return Center(child: CircularProgressIndicator.adaptive());
           }
 
-          final data = snapshot.data["list"][0];
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.hasError.toString()),
+            );
+          }
 
-          // variables
-          final temp = data["main"]["temp"];
-          final desc = data["weather"][0]["main"];
+          final data = snapshot.data!;
+
+          final LMods = data["list"][0];
+          // Main variables
+          final temp = LMods["main"]["temp"];
+          final desc = LMods["weather"][0]["main"];
+// 
+          // Additional variables
+          final humidity = LMods["main"]["humidity"].toString();
+          final windSpeed = LMods["wind"]["speed"].toString();
+          final pressure = LMods["main"]["pressure"].toString();
 
           return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -141,7 +152,7 @@ class _WeatherAppState extends State<WeatherApp> {
         
               SizedBox(height: 20),
         
-              // Forecast
+              // Additional Information
               Text(
                 "Additional Information",
                 style: TextStyle(
@@ -159,21 +170,21 @@ class _WeatherAppState extends State<WeatherApp> {
                   Additional(
                     icon: Icons.water_drop,
                     label: "Humidity",
-                    value: "91",
+                    value: humidity,
                   ),
         
                   // wind speed
                   Additional(
                     icon: Icons.air,
                     label: "Wind speed",
-                    value: "103.6",
+                    value: windSpeed,
                   ),
         
                   // pressure
                   Additional(
                     icon: Icons.beach_access,
                     label: "Pressure",
-                    value: "1002",
+                    value: pressure,
                   )
         
                 ],
