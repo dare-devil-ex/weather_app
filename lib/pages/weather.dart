@@ -15,11 +15,8 @@ class WeatherApp extends StatefulWidget {
 }
 
 class _WeatherAppState extends State<WeatherApp> {
-
-  
-
+  late Future<Map<String, dynamic>> wkaie;
   Future<Map<String, dynamic>> fetcher() async {
-    
     try{
       final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=India&appid=d1845658f92b31c64bd94f06f7188c9c"));
       final data = jsonDecode(res.body);
@@ -32,9 +29,13 @@ class _WeatherAppState extends State<WeatherApp> {
       } catch(e) {
         throw e.toString();
       }
-
     }
-  
+
+  @override
+  void initState() {
+    wkaie = fetcher();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +50,23 @@ class _WeatherAppState extends State<WeatherApp> {
           ),
         ),
         centerTitle: true,
-        actions: [
+        actions: [          
           IconButton(onPressed: () {
-            
+            setState(() {
+              
+            });
+          }, icon: Icon(Icons.light_mode_sharp)),
+          IconButton(onPressed: () {
+            setState(() {
+              wkaie = fetcher();
+            });
           },
           icon: Icon(Icons.refresh))
         ],
       ),
 
       body: FutureBuilder(
-        future: fetcher(),
+        future: wkaie,
         builder: (context, snapshot) {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -142,14 +150,14 @@ class _WeatherAppState extends State<WeatherApp> {
               SizedBox(
                 height: 110,
                 child: ListView.builder(
-                  itemCount: 5,
+                  itemCount: 8,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final time = DateTime.parse(data["list"][ index + 1]["dt_txt"].toString());
                     final value = data["list"][ index + 1 ]["main"]["temp"].toString();
                     final icon = data["list"][ index + 1 ]["weather"][0]["main"] == "Clouds" || data["list"][ index + 1 ]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny;
                     return Forecast(
-                      time: DateFormat.Hm().format(time),
+                      time: DateFormat.j().format(time),
                       value: value,
                        icon: icon
                     );
