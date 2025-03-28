@@ -27,10 +27,6 @@ class _WeatherAppState extends State<WeatherApp> {
       if (data["cod"] != "200") {
         throw data["message"];
       }
-
-
-      
-      
       return data;
 
       } catch(e) {
@@ -69,8 +65,11 @@ class _WeatherAppState extends State<WeatherApp> {
             return Center(child: CircularProgressIndicator.adaptive());
           }
 
-          final temp = snapshot.data["list"][0]["main"]["temp"];
-          final desc = snapshot.data["list"][0]["weather"][0]["description"];
+          final data = snapshot.data["list"][0];
+
+          // variables
+          final temp = data["main"]["temp"];
+          final desc = data["weather"][0]["main"];
 
           return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -81,7 +80,7 @@ class _WeatherAppState extends State<WeatherApp> {
               SizedBox(
                 width: double.infinity,
                 child: Card(
-                  elevation: 13,
+                  elevation: 6,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: BackdropFilter(
@@ -99,7 +98,7 @@ class _WeatherAppState extends State<WeatherApp> {
                               ),
                             ),
                             Icon(
-                              Icons.cloud,
+                              desc == "Clouds" || desc == "Rain" ? Icons.cloud : Icons.sunny,
                               size: 50,
                             ),
                             Text(
@@ -122,9 +121,11 @@ class _WeatherAppState extends State<WeatherApp> {
               Text(
                 "Weather Forecast",
                 style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: 15
                 ),
               ),
+              SizedBox(height: 15),
               
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -144,6 +145,7 @@ class _WeatherAppState extends State<WeatherApp> {
               Text(
                 "Additional Information",
                 style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: 15
                 ),
               ),
