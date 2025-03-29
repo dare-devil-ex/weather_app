@@ -1,8 +1,7 @@
-
 # Weather App
 
+This is a weather app fully flutter and openweather api based, Goto releases or [click here download](https://github.com/dare-devil-ex/weather_app/releases/tag/weather-ver1)
 
-This is a weather app fully flutter and openweather api based
 ## Screenshot Terminal
 
 <img src="https://github.com/user-attachments/assets/c7819166-5612-4f1c-972b-29ba770ebe1e" width=250>
