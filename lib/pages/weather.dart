@@ -52,6 +52,10 @@ class _WeatherAppState extends State<WeatherApp> {
         centerTitle: true,
         actions: [
           IconButton(onPressed: () {
+            
+          }, 
+          icon: Icon(Icons.light_mode_sharp)),
+          IconButton(onPressed: () {
             setState(() {
               wkaie = fetcher();
             });
