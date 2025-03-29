@@ -1,11 +1,16 @@
+
 # Weather App
 
-A flutter based dynamic weather app
 
-## Sceenshots
+This is a weather app fully flutter and openweather api based
+## Screenshot Terminal
 
-## Download
+![weather1](https://github.com/user-attachments/assets/c7819166-5612-4f1c-972b-29ba770ebe1e)
 
-## Authour
+![weather2](https://github.com/user-attachments/assets/39b0ecb6-b6ba-4c7b-93fe-3da2b8921be9)
 
-~ [@dare-devil-ex]("https://t.me/dare_devil_ex")
+## Author
+
+
+- [@daredevilex](https://www.github.com/dare-devil-ex)
+
