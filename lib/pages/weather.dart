@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/pages/Additional.dart';
 import 'package:weather_app/pages/forecast.dart';
@@ -17,10 +18,38 @@ class WeatherApp extends StatefulWidget {
 class _WeatherAppState extends State<WeatherApp> {
   late Future<Map<String, dynamic>> wkaie;
   bool isLight = true;
+  late double lati = 0;
+  late double long = 0;
   late IconData LightButton = Icons.light_mode_outlined;
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+    } 
+    return await Geolocator.getCurrentPosition();
+}
+
+
+
   Future<Map<String, dynamic>> fetcher() async {
     try{
-      final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?q=India&appid=d1845658f92b31c64bd94f06f7188c9c"));
+      final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?lat=9.406997&lon=78.792911&appid=d1845658f92b31c64bd94f06f7188c9c&units=metric"));
       final data = jsonDecode(res.body);
       
       if (data["cod"] != "200") {
@@ -36,6 +65,12 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   void initState() {
     wkaie = fetcher();
+    _determinePosition().then((value) {
+      setState(() {
+        lati = value.latitude;
+        long = value.longitude;
+      });
+    });
     super.initState();
   }
 
@@ -97,7 +132,6 @@ class _WeatherAppState extends State<WeatherApp> {
             // Main variables
             final temp = wkan["main"]["temp"];
             final desc = wkan["weather"][0]["main"];
-      // 
             // Additional variables
             final humidity = wkan["main"]["humidity"].toString();
             final windSpeed = wkan["wind"]["speed"].toString();
@@ -112,7 +146,7 @@ class _WeatherAppState extends State<WeatherApp> {
                 SizedBox(
                   width: double.infinity,
                   child: Card(
-                    elevation: 6,
+                    elevation: 3,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: BackdropFilter(
