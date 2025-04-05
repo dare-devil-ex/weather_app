@@ -145,7 +145,7 @@ class _WeatherAppState extends State<WeatherApp> {
                 SizedBox(
                   width: double.infinity,
                   child: Card(
-                    elevation: 7,
+                    elevation: 6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: BackdropFilter(
