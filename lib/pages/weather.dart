@@ -45,11 +45,10 @@ class _WeatherAppState extends State<WeatherApp> {
     return await Geolocator.getCurrentPosition();
 }
 
-
-
   Future<Map<String, dynamic>> fetcher() async {
     try{
-      final res = await http.get(Uri.parse("https://api.openweathermap.org/data/2.5/forecast?lat=9.406997&lon=78.792911&appid=d1845658f92b31c64bd94f06f7188c9c&units=metric"));
+      String url = utf8.decode(base64Decode("aHR0cHM6Ly9hcGkub3BlbndlYXRoZXJtYXAub3JnL2RhdGEvMi41L2ZvcmVjYXN0P2xhdD05LjQwNjk5NyZsb249NzguNzkyOTExJmFwcGlkPWQxODQ1NjU4ZjkyYjMxYzY0YmQ5NGYwNmY3MTg4YzljJnVuaXRzPW1ldHJpYw=="));
+      final res = await http.get(Uri.parse(url));
       final data = jsonDecode(res.body);
       
       if (data["cod"] != "200") {
@@ -136,7 +135,7 @@ class _WeatherAppState extends State<WeatherApp> {
             final humidity = wkan["main"]["humidity"].toString();
             final windSpeed = wkan["wind"]["speed"].toString();
             final pressure = wkan["main"]["pressure"].toString();
-      
+
             return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -164,7 +163,7 @@ class _WeatherAppState extends State<WeatherApp> {
                                 ),
                               ),
                               Icon(
-                                desc == "Clouds" || desc == "Rain" ? Icons.cloud : Icons.sunny,
+                                desc == "Clouds" ? Icons.cloud : desc == "Rain" ? Icons.cloudy_snowing : Icons.sunny,
                                 size: 50,
                               ),
                               Text(
@@ -201,7 +200,7 @@ class _WeatherAppState extends State<WeatherApp> {
                     itemBuilder: (context, index) {
                       final time = DateTime.parse(data["list"][ index + 1]["dt_txt"].toString());
                       final value = data["list"][ index + 1 ]["main"]["temp"].toString();
-                      final icon = data["list"][ index + 1 ]["weather"][0]["main"] == "Clouds" || data["list"][ index + 1 ]["weather"][0]["main"] == "Rain" ? Icons.cloud : Icons.sunny;
+                      final icon = data["list"][ index + 1 ]["weather"][0]["main"] == "Clouds" ? Icons.cloud : data["list"][ index + 1 ]["weather"][0]["main"] == "Rain" ? Icons.cloudy_snowing : Icons.sunny;
                       return Forecast(
                         time: DateFormat.j().format(time),
                         value: value,

@@ -19,7 +19,7 @@ class Forecast extends StatelessWidget {
     return SizedBox(
     width: 100,
     child: Card(
-      elevation: 9,
+      elevation: 4.4,
       child: Container(
         padding: EdgeInsets.all(9),
         width: 100,
