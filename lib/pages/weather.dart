@@ -17,6 +17,8 @@ class WeatherApp extends StatefulWidget {
 }
 
 class _WeatherAppState extends State<WeatherApp> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   late Future<Map<String, dynamic>> wkaie;
   bool isLight = true;
   late double lati = 0;
@@ -67,23 +69,22 @@ class _WeatherAppState extends State<WeatherApp> {
   void _checkPermission() async {
     bool granted = await requestLocationPermission();
 
-    if (granted) {
-      SnackBar snackBar = SnackBar(
-        content: Text("Location permission granted"),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      SnackBar snackBar = SnackBar(
-        content: Text("Location permission not granted"),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
+    print("Location permission granted: $granted");
+
+    final snackBar = SnackBar(
+      content: Text(
+        granted ? "Location permission granted" : "Permission not granted",
+      ),
+    );
+
+    _scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: isLight ? ThemeData.light() : ThemeData.dark(),
+      scaffoldMessengerKey: _scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
