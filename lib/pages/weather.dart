@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/util/geoloc.dart';
-import 'package:weather_app/pages/Additional.dart';
+import 'package:weather_app/pages/additional.dart';
 import 'package:weather_app/pages/forecast.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,6 +23,7 @@ class _WeatherAppState extends State<WeatherApp> {
   bool isLight = true;
   late double lati = 0;
   late double long = 0;
+  // ignore: non_constant_identifier_names
   late IconData LightButton = Icons.light_mode_outlined;
 
   Future<Position> _determinePosition() async {
@@ -56,7 +57,7 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   void initState() {
     wkaie = fetcher();
-    _checkPermission();
+    _checkPermission(context);
     _determinePosition().then((value) {
       setState(() {
         lati = value.latitude;
@@ -66,15 +67,26 @@ class _WeatherAppState extends State<WeatherApp> {
     super.initState();
   }
 
-  void _checkPermission() async {
+  void _checkPermission(BuildContext context) async {
     bool granted = await requestLocationPermission();
-
-    print("Location permission granted: $granted");
+    Map<String, dynamic> location = await fetcher();
 
     final snackBar = SnackBar(
       content: Text(
-        granted ? "Location permission granted" : "Permission not granted",
+        granted
+            ? "Weather data for ${location["city"]["name"]}"
+            : "Permission not granted",
       ),
+      behavior: SnackBarBehavior.floating,
+      action:
+          !granted
+              ? SnackBarAction(
+                label: "GRANT",
+                onPressed: () {
+                  _checkPermission(context);
+                },
+              )
+              : null,
     );
 
     _scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
@@ -132,14 +144,14 @@ class _WeatherAppState extends State<WeatherApp> {
 
             final data = snapshot.data!;
 
-            final wkan = data["list"][0];
+            final ddex = data["list"][0];
             // Main variables
-            final temp = wkan["main"]["temp"];
-            final desc = wkan["weather"][0]["main"];
+            final temp = ddex["main"]["temp"];
+            final desc = ddex["weather"][0]["main"];
             // Additional variables
-            final humidity = wkan["main"]["humidity"].toString();
-            final windSpeed = wkan["wind"]["speed"].toString();
-            final pressure = wkan["main"]["pressure"].toString();
+            final humidity = ddex["main"]["humidity"].toString();
+            final windSpeed = ddex["wind"]["speed"].toString();
+            final pressure = ddex["main"]["pressure"].toString();
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
